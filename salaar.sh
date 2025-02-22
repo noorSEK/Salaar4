@@ -148,13 +148,14 @@ cat subdomains.txt | httpx -silent -o live-subdomains.txt
 
 # Domain Vulnerability Scanning
 echo "[+] Running Nuclei on live subdomains..."
-cat live-subdomains.txt | nuclei -t /root/nuclei-templates/ -severity low -rl 3 -c 2 -silent -o nuclei-low.txt
-cat live-subdomains.txt | nuclei -t /root/nuclei-templates/ -severity medium -rl 3 -c 2 -silent -o nuclei-medium.txt
-cat live-subdomains.txt | nuclei -t /root/nuclei-templates/ -severity unknown -rl 3 -c 2 -silent -o nuclei-unknown.txt
-cat live-subdomains.txt | nuclei -t /root/nuclei-templates/ -severity high -rl 3 -c 2 -silent -o nuclei-high.txt
-cat live-subdomains.txt | nuclei -t /root/nuclei-templates/ -severity critical -rl 3 -c 2 -silent -o nuclei-critical.txt
+rm /root/nuclei-templates/ssl
+cat live-subdomains.txt | shuf | nuclei -t /root/nuclei-templates/ -severity low -rl 3 -c 2 -silent -o nuclei-low.txt
+cat live-subdomains.txt | shuf | nuclei -t /root/nuclei-templates/ -severity medium -rl 3 -c 2 -silent -o nuclei-medium.txt
+cat live-subdomains.txt | shuf | nuclei -t /root/nuclei-templates/ -severity unknown -rl 3 -c 2 -silent -o nuclei-unknown.txt
+cat live-subdomains.txt | shuf | nuclei -t /root/nuclei-templates/ -severity high -rl 3 -c 2 -silent -o nuclei-high.txt
+cat live-subdomains.txt | shuf | nuclei -t /root/nuclei-templates/ -severity critical -rl 3 -c 2 -silent -o nuclei-critical.txt
 # Merge Nuclei results
-cat nuclei-*.txt | sort -u > nuclei-results.txt
+cat nuclei-*.txt | sort -u >> nuclei-results.txt
 rm nuclei-*.txt
 cat nuclei-results.txt | notify --bulk
 
@@ -175,4 +176,4 @@ cat nuclei-results.txt | notify --bulk
 #cat params.txt | grep -Ei 'select|report|role|update|query|user|name|sort|where|search|params|process|row|view|table|from|sel|results|sleep|fetch|order|keyword|column|field|delete|string|number|filter' | python3 /opt/sqlmap/sqlmap.py --batch --banner  --output-dir=sqlmap-results/
 
 
-echo "✅ Script execution completed!"
+echo "✅ Script execution completed!" 
